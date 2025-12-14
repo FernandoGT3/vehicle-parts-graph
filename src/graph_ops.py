@@ -88,15 +88,31 @@ def get_part_criticality(B):
     """
     # Filter only part nodes
     parts = [n for n, d in B.nodes(data=True) if d.get('type') == 'part']
+
+    # 1. Degree Centrality (Volume)
+    deg_centrality = nx.degree_centrality(B)
     
-    # We can use simple degree or degree centrality
+    # 2. Betweenness Centrality (Bottlenecks)
+    bet_centrality = nx.betweenness_centrality(B)
+    
+    # 3. Eigenvector Centrality (Influence)
+    try:
+        eig_centrality = nx.eigenvector_centrality(B, max_iter=1000)
+    except:
+        eig_centrality = {n: 0 for n in B.nodes()}
+
     criticality = []
     for p in parts:
-        degree = B.degree(p)
-        # Calculate how many unique car families this part connects
-        neighbors = list(B.neighbors(p))
-        criticality.append((p, degree))
+        d = B.degree(p)
+        dc = deg_centrality.get(p, 0)
+        bc = bet_centrality.get(p, 0)
+        ec = eig_centrality.get(p, 0)
         
+        # Tuple: (Part, Degree, Degree_Cent, Betweenness, Eigenvector)
+        criticality.append((p, d, dc, bc, ec))
+        
+    # Sort by Betweenness (Bottlenecks) primarily for this view, or Keep Degree?
+    # Let's keep Degree as primary sort, but return all data
     return sorted(criticality, key=lambda x: x[1], reverse=True)
 
 def simulate_part_failure(B, part_node):
@@ -251,3 +267,33 @@ def predict_demand(B, communities):
                 suggestions[car] = missing
                 
     return comm_standards, suggestions
+
+
+def get_clustering_analysis(G):
+    """
+    Calculates Clustering Coefficient and Transitivity.
+    Answers: How connected are the neighbors of a node? (Platform Maturity)
+    """
+    avg_clustering = nx.average_clustering(G)
+    transitivity = nx.transitivity(G)
+    local_clustering = nx.clustering(G)
+    
+    return avg_clustering, transitivity, local_clustering
+
+def calculate_jaccard_weights(B, P):
+    """
+    Calculates Jaccard Similarity for edges in Projected Graph.
+    J(A,B) = |intersection| / |union|
+    Updates edges in P with 'jaccard' attribute.
+    """
+    for u, v in P.edges():
+        u_parts = set(B.neighbors(u))
+        v_parts = set(B.neighbors(v))
+        
+        intersection = len(u_parts & v_parts)
+        union = len(u_parts | v_parts)
+        
+        jaccard = intersection / union if union > 0 else 0
+        P[u][v]['jaccard'] = jaccard
+        
+    return P

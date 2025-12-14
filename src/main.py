@@ -25,6 +25,7 @@ def main():
         print("7.  [Advanced] Resilience Test (Simulate Failure)")
         print("8.  [Reporting] Generate Full Report for Article")
         print("9.  [Visuals] Generate All Visualizations")
+        print("11. [Extra] Advanced Topology Metrics (New)")
         print("10. Exit")
         print("="*50)
         
@@ -103,6 +104,26 @@ def main():
         elif choice == '10':
             print("Exiting...")
             break
+            
+        elif choice == '11':
+            print("\n[Advanced Topology Metrics]")
+            # Clustering
+            avg_c, trans, _ = graph_ops.get_clustering_analysis(P)
+            print(f"Average Clustering Coefficient: {avg_c:.4f}")
+            print(f"Transitivity: {trans:.4f}")
+            
+            # Assortativity
+            assort, _ = graph_ops.calculate_assortativity(P)
+            print(f"Assortativity (Market Segment): {assort:.4f}")
+            
+            # Centrality Comparison
+            print("\n[Centrality Comparison - Top 5]")
+            print(f"{'Part':<25} {'Deg':<5} {'Betw':<8} {'Eigen':<8}")
+            print("-" * 50)
+            crit = graph_ops.get_part_criticality(B)[:5]
+            for p, d, dc, bc, ec in crit:
+                print(f"{p:<25} {d:<5} {bc:.3f}    {ec:.3f}")
+
         else:
             print("Invalid choice.")
             
