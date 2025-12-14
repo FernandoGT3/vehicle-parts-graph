@@ -1,0 +1,15 @@
+Avaliando os 7 primeiros slides da apresentação, TG.pdf, preciso desenvolver o projeto de teoria dos grafos.
+
+Os carros atuais e suas peças estão no arquivo vehicle_parts.py, aumente a quantidade de carros para pelo menos 30 e de peças para pelo menos 40, tente ao máximo diversificar os modelos de veículos e as peças.
+
+Eu preciso usar todos os tópicos de TG necessários para resolver os problemas e responder as perguntas, seja dos mais simples como cálcuo de grau, até árvores de abrangência e corte etc.
+
+Para resolver os problemas, eu preciso de um menu interativo que permita ao usuário escolher qual informação ele deseja obter, como "quantidade de arestas, "bla bla bla" etc.
+
+O arquivo vehicle_parts.py deve ser utilizado apenas para pegar as informações de carros e peças e suas ligações, não deve ser modificado. Todas as funções novas (desde o 0) e seus arquivos etc devem ser colocados na pasta /src.
+
+Lembre-se de adicionar prints dos grafos e outras informações, gráficos etc com o networkx.
+
+Ao final de tudo gere um markdown com o resumo para depois eu desenvolver um aprese e um artigo. O projeto precisa ser bem robusto, usando quase todos os tópicos de Teoria dos Grafos e responder as perguntas do problema.
+
+Se for necessário testar, antes gere um .venv com o UV, e depois ative o .venv para rodar.

@@ -1,0 +1,43 @@
+Contextualização:
+	Com o crescente número de fusões das empresas automobilísticas, muitas fabricantes e modelos de carros compartilham mesma plataforma, motor, transmissão entre outras peças.
+
+Problema: 
+	Esse compartilhamento gera dois problemas.
+Como reduzir o custo de estoques de reposição?
+Qual o impacto em caso de falha na cadeia de fornecimento de certas peças?
+
+
+Como reduzir o custo de estoques de reposição?
+	Oficinas gastam muito mantendo muitas variantes de peças. Se identificarmos conjuntos de peças compatíveis entre modelos, podemos reduzir SKUs estocados sem perder cobertura de atendimento.
+
+Qual o impacto em caso de falha na cadeia de fornecimento de certas peças?
+Se muitas linhas dependem da mesma peça/supplier, a falha de um fornecedor causa grande impacto.
+
+
+Podemos modelar o problema como um Grafo.
+
+Onde temos,
+Nós:
+V = {V1, …, Vn}, sendo o conjunto de vértices que representam os veículos.
+Arestas:
+Ligação entre cada veículo com as peças, caso aquele veículo use a mesma peça. 
+
+Os pesos das arestas serão representados por números binários.
+
+
+
+Vamos considerar cada dígito de um número no sistema binário sendo um tipo diferente de peça compartilhada.
+
+Por exemplo:
+_ _ _ _ (Motor, Transmissão, Suspensão, Freios)
+
+Dessa forma, dois carros que compartilham o mesmo motor, seriam ligados por uma aresta com peso 1 (apenas um dígito 1).
+
+
+Perguntas que podem ser respondidas:
+Quais agrupamentos naturais de veículos existem segundo compartilhamento de peças (clusters/plataformas)?
+Quais peças são “hubs” — usadas por muitos veículos?
+Se uma peça crítica ficar indisponível (ou fornecedor falhar), quantos modelos/veículos ficam afetados?
+Identificar fornecedores cujo colapso causa maior dano.
+Como minimizar custo total de estoque (custo de manter vs. custo de falta)
+Prever demanda de peças por família de veículos.
