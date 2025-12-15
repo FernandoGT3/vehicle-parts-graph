@@ -1,0 +1,392 @@
+\documentclass[aspectratio=169]{beamer}
+
+% --- Pacotes e Configurações ---
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{graphicx}
+\usepackage{booktabs} % Para tabelas bonitas
+\usepackage{amsmath}
+\usepackage{ragged2e} % Para justificar texto
+\usepackage{tikz}
+
+% --- Tema Visual ---
+% Sugestão de tema profissional e limpo
+\usetheme{Madrid}
+\usecolortheme{beaver} % Esquema de cores vermelho/cinza (sóbrio)
+\setbeamercovered{transparent} % Transparência em itens futuros
+
+% --- Metadados ---
+\title[Resiliência na Cadeia Automotiva]{Análise Topológica e Resiliência na Cadeia de Suprimentos Automotiva}
+\subtitle{Uma Abordagem via Teoria dos Grafos}
+\author{Caio, Eduardo, Felipe, Luiz, Matheus (Grupo Esperança)}
+\institute{Universidade Federal de São Paulo}
+\date{\today}
+
+\begin{document}
+
+% --- Slide 1: Capa ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Slide 2: Agenda ---
+\begin{frame}{Agenda}
+    \tableofcontents
+\end{frame}
+
+% =================================================================
+% SEÇÃO 1: INTRODUÇÃO
+% =================================================================
+\section{Introdução e Contexto}
+
+\begin{frame}{Contexto da Indústria Automotiva}
+    \begin{columns}
+        \column{0.6\textwidth}
+        \justifying
+        Nas últimas duas décadas, o setor passou por uma transformação radical visando redução de custos.
+        \vspace{0.5cm}
+        \textbf{Engenharia de Plataformas:}
+        \begin{itemize}
+            \item Abandono do projeto de "unidades isoladas".
+            \item Adoção de "kits de construção" modulares.
+            \item \textbf{Exemplos:} VW (MQB), Toyota (TNGA), Stellantis (CMP).
+            \item Compartilhamento massivo entre marcas do mesmo conglomerado.
+        \end{itemize}
+
+        \column{0.4\textwidth}
+        \begin{alertblock}{O Problema da Centralização}
+            Embora eficiente, cria interdependências invisíveis.
+            Uma falha trivial (ex: microchip) paralisa múltiplas marcas simultaneamente.
+        \end{alertblock}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Objetivos do Trabalho}
+    Buscamos "desvendar" a teia de conexões respondendo a 5 perguntas chave:
+    \vspace{0.5cm}
+    \begin{enumerate}
+        \item \textbf{Topologia:} Qual a estrutura real das alianças industriais?
+        \item \textbf{Vulnerabilidade:} Onde estão os pontos únicos de falha (\textit{Single Points of Failure})?
+        \item \textbf{Resiliência:} Quão robusta é a malha frente a colapsos?
+        \item \textbf{Segmentação:} O compartilhamento respeita a divisão Premium vs Economy?
+        \item \textbf{Otimização:} É possível prever demandas futuras via rede?
+    \end{enumerate}
+\end{frame}
+
+% =================================================================
+% SEÇÃO 2: METODOLOGIA
+% =================================================================
+\section{Metodologia}
+
+\begin{frame}{Modelagem Matemática}
+    \begin{block}{Grafo Bipartido $G = (U, V, E)$}
+        Modelamos o sistema com dois conjuntos disjuntos:
+        \begin{itemize}
+            \item $U = \{u_1, ..., u_n\}$: Conjunto de \textbf{36 Veículos}.
+            \item $V = \{v_1, ..., v_m\}$: Conjunto de \textbf{48 Peças/Sistemas}.
+        \end{itemize}
+        Aresta $(u_i, v_j)$ existe se o veículo utiliza a peça.
+    \end{block}
+
+    \vspace{0.5cm}
+    \textbf{Projeção Unimodal:}
+    Realizamos uma projeção onde $w_{xy}$ (peso) representa o número de peças compartilhadas entre dois carros.
+\end{frame}
+
+\begin{frame}{Visualização da Rede Bipartida}
+    \begin{figure}
+        \centering
+        % Ajuste a escala conforme necessário
+        \includegraphics[height=0.75\textheight]{../assets/fig1_network.png} 
+        \caption{Alta densidade de conexões convergindo para nós centrais (hubs).}
+    \end{figure}
+\end{frame}
+
+% =================================================================
+% SEÇÃO 3: ANÁLISE TOPOLÓGICA
+% =================================================================
+\section{Análise da Topologia}
+
+\begin{frame}{Detecção de Comunidades (Modularidade)}
+    \begin{columns}
+        \column{0.5\textwidth}
+        Utilizando \textit{Greedy Modularity Maximization}, detectamos 3 comunidades que refletem as alianças globais:
+        \vspace{0.5cm}
+        \begin{itemize}
+            \item \textbf{Família 1:} VW Group (VW, Audi, Porsche).
+            \item \textbf{Família 2:} Renault-Nissan + Stellantis.
+            \item \textbf{Família 3:} BMW, Mercedes, Toyota, Honda, Ford, Volvo.
+        \end{itemize}
+
+        \column{0.5\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=\textwidth]{../assets/fig2_clusters.png}
+            \caption{Clusters Estratégicos Detectados.}
+        \end{figure}
+    \end{columns}
+\end{frame}
+
+% \begin{frame}{Coeficiente de Clustering}
+%     \begin{columns}
+%         \column{0.4\textwidth}
+%         \justifying
+%         Calculamos o coeficiente de clustering local para avaliar a maturidade das plataformas.
+%         \vspace{0.5cm}
+%         \begin{itemize}
+%             \item Valores altos indicam vizinhos conectados entre si.
+%             \item Característica de plataformas maduras com forte integração interna.
+%         \end{itemize}
+
+%         \column{0.6\textwidth}
+%         \begin{figure}
+%             \centering
+%             \includegraphics[width=\textwidth]{../assets/fig10_local_clustering.png}
+%             \caption{Clustering Local por Veículo.}
+%         \end{figure}
+%     \end{columns}
+% \end{frame}
+
+\begin{frame}{Assortatividade e Mistura de Segmentos}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \textbf{Coeficiente de Assortatividade ($r \approx -0.008$):}
+        \vspace{0.5cm}
+        \begin{itemize}
+            \item Valor próximo de zero indica \textbf{Homogeneização Tecnológica}.
+            \item A matriz de mistura mostra distribuição equilibrada.
+            \item Carros \textit{Premium} e \textit{Economy} compartilham a mesma "alma mecânica".
+        \end{itemize}
+
+        \column{0.5\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=0.9\textwidth]{../assets/fig9_mixing_matrix.png}
+            \caption{Matriz de Mistura (Mixing Matrix).}
+        \end{figure}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Similaridade de Jaccard}
+    \begin{columns}
+        \column{0.4\textwidth}
+        \textbf{Índice de Jaccard:}
+        \begin{equation*}
+            J(A,B) = \frac{|A \cap B|}{|A \cup B|}
+        \end{equation*}
+        \vspace{0.3cm}
+        O Heatmap revela "gêmeos de plataforma":
+        \begin{itemize}
+            \item Blocos diagonais confirmam os clusters.
+            \item Identifica veículos com base tecnológica idêntica.
+        \end{itemize}
+
+        \column{0.6\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=\textwidth]{../assets/fig7_jaccard_heatmap.png}
+            \caption{Heatmap de Similaridade.}
+        \end{figure}
+    \end{columns}
+\end{frame}
+
+% =================================================================
+% SEÇÃO 4: VULNERABILIDADE
+% =================================================================
+\section{Vulnerabilidade e Riscos}
+
+\begin{frame}{Distribuição de Graus (Lei de Potência)}
+    \begin{columns}
+        \column{0.4\textwidth}
+        A rede exibe comportamento \textit{Scale-Free}.
+        \vspace{0.5cm}
+        \begin{itemize}
+            \item Linearidade no gráfico log-log.
+            \item Poucos nós possuem conexões desproporcionais.
+            \item Estrutura típica de sistemas vulneráveis a ataques direcionados.
+        \end{itemize}
+
+        \column{0.6\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=\textwidth]{../assets/fig8_degree_distribution.png}
+            \caption{Distribuição de Graus.}
+        \end{figure}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Identificação de Hubs (Infraestrutura Crítica)}
+    Poucos nós (Hubs) concentram o risco sistêmico.
+    
+    \begin{table}
+        \centering
+        \footnotesize
+        \begin{tabular}{clccc}
+        \toprule
+        \textbf{Rank} & \textbf{Componente (Hub)} & \textbf{Grau} & \textbf{Eigen} & \textbf{Betweenness} \\
+        \midrule
+        1 & Sistema ABS Bosch & 28 & 0.350 & 0.485 \\
+        2 & Suspensão Multilink & 9 & 0.285 & 0.112 \\
+        3 & Turbocompressor KKK & 8 & 0.245 & 0.098 \\
+        4 & Transmissão DSG DQ250 & 6 & 0.198 & 0.067 \\
+        5 & Motor EA888 2.0T & 4 & 0.165 & 0.045 \\
+        \bottomrule
+        \end{tabular}
+        \caption{Top 5 Componentes Críticos}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Comparação Multicritério de Centralidade}
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.75\textheight]{../assets/fig12_centrality_comparison.png}
+        \caption{Comparação: Grau vs Intermediação e Grau vs Autovetor. O ABS Bosch destaca-se em todas as dimensões.}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Visualização dos Hubs}
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.75\textheight]{../assets/fig3_hubs.png}
+        \caption{Disparidade de conectividade: O "Sistema ABS Bosch" como Super-Hub.}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Decomposição K-Core: O Núcleo Estável}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \justifying
+        A análise revelou um núcleo máximo com \textbf{$k_{max} = 27$}.
+        \vspace{0.5cm}
+        Os veículos neste núcleo formam a espinha dorsal do mercado, compartilhando peças com pelo menos outros 27 modelos.
+        Isso demonstra a profundidade da interconexão da indústria.
+
+        \column{0.5\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=\textwidth]{../assets/fig6_kcore.png}
+            \caption{Camadas da Rede (K-Shells).}
+        \end{figure}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Simulação de Colapso em Cascata (Stress Test)}
+    \begin{columns}
+        \column{0.4\textwidth}
+        Simulamos a falha sequencial dos 5 maiores hubs.
+        
+        \vspace{0.3cm}
+        \begin{alertblock}{Resultado Crítico}
+            A rede sofre uma \textbf{transição de fase abrupta}.
+            A perda de apenas 1 hub fragmenta a rede massivamente (perda de 19\%).
+        \end{alertblock}
+
+        \column{0.6\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=\textwidth]{../assets/fig4_resilience.png}
+            \caption{Curva de degradação da rede.}
+        \end{figure}
+    \end{columns}
+\end{frame}
+
+% =================================================================
+% SEÇÃO 5: APLICAÇÕES PRÁTICAS
+% =================================================================
+\section{Aplicações Práticas}
+
+% \begin{frame}{Algoritmo de Recomendação e Padronização}
+%     Utilizando Filtragem Colaborativa nos clusters, identificamos oportunidades de padronização (ou erros de cadastro).
+%     \vspace{0.5cm}
+%     \begin{table}
+%         \centering
+%         \small
+%         \begin{tabular}{ll}
+%         \toprule
+%         \textbf{Veículo Alvo} & \textbf{Sugestão (Baseado no Cluster)} \\
+%         \midrule
+%         Honda CR-V & Sistema ABS Bosch \\
+%         Mercedes E-Class (W213) & Sistema ABS Bosch \\
+%         Ford Focus & Airbag de Cortina \\
+%         Ford Kuga & Sistema ABS Bosch \\
+%         \bottomrule
+%         \end{tabular}
+%     \end{table}
+% \end{frame}
+
+\begin{frame}{Backbone da Indústria (MST)}
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.75\textheight]{../assets/fig5_backbone.png}
+        \caption{Árvore Geradora Máxima: A infraestrutura mínima conectada.}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Eficiência de Estoque}
+    Quantificamos a motivação econômica da estratégia de plataformas:
+    
+    \vspace{0.5cm}
+    \begin{center}
+        \huge
+        Redução de Complexidade: \\
+        \textbf{\textcolor{red}{65.7\%}}
+    \end{center}
+    
+    \vspace{0.5cm}
+    \normalsize
+    Demanda agregada de 140 partes reduzida para um inventário real de 48 peças únicas.
+\end{frame}
+
+% =================================================================
+% SEÇÃO 6: CONCLUSÃO
+% =================================================================
+\section{Conclusão}
+
+\begin{frame}{Conclusões e Limitações}
+    \begin{block}{Conclusão Principal}
+        Topologia otimizada para \textbf{Eficiência}, mas estruturalmente \textbf{Frágil}.
+    \end{block}
+
+    \begin{itemize}
+        \item \textbf{Mundo Pequeno:} Facilita difusão de falhas.
+        \item \textbf{Risco Sistêmico:} Dependência extrema de Super-Hubs (ex: ABS Bosch).
+        \item \textbf{Colapso:} Falha de 1 componente pode paralisar 77\% da frota.
+    \end{itemize}
+    
+    \vspace{0.3cm}
+    \textbf{Limitações:}
+    \begin{itemize}
+        \item Dataset pequeno (36 veículos) e estático.
+        \item Pesos uniformes nas arestas.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Código - Menu}
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.6\textheight]{../assets/menu.png}
+        \caption{Menu interativo construído durante a disciplina.}
+    \end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Arquivos de Dados I}
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.6\textheight]{../assets/dados1.png}
+        \caption{Arquivo de entrada do Grafo - data.py}
+    \end{figure}
+
+\end{frame}
+\begin{frame}{Arquivos de Dados II}
+
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.6\textheight]{../assets/dados2.png}
+        \caption{Arquivo de entrada do Grafo - data.py}
+    \end{figure}
+
+\end{frame}
+
+\end{document}
