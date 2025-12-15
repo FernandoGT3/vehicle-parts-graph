@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1765804791.90628 "/home/luiz-moloni/Documents/UNIFESP/9.Semestre/TG/vehicle parts/docs/artigo_final.tex" "artigo_final.pdf" "artigo_final" 1765804792.4351 2
+["pdflatex"] 1765807161.54405 "/home/luiz-moloni/Documents/UNIFESP/9.Semestre/TG/vehicle parts/docs/artigo_final.tex" "artigo_final.pdf" "artigo_final" 1765807162.12805 2
   "/etc/texmf/web2c/texmf.cnf" 1765145135.81168 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/luiz-moloni/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.600pk" 1765799572.3138 14040 c36d2f3738fc8fbdbedb5f7e98976654 ""
   "/home/luiz-moloni/Documents/UNIFESP/9.Semestre/TG/vehicle parts/docs/artigo_final.tex" 1765800473.62359 15889 a5dea4818d7f4e82c168c52d0d1ad338 ""
@@ -95,10 +95,10 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1765145144.18978 128028 f533b797fba58d231669ea19e894e23e ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1765145159 6801905 5b817487e8787221b4c37d6d840e68c6 ""
-  "artigo_final.aux" 1765804792.38504 6568 1ca921809457c02bf5fd4d7384ef6475 "pdflatex"
-  "artigo_final.out" 1765804792.38504 5316 6c77e1d94148517db248f622586a1877 "pdflatex"
+  "artigo_final.aux" 1765807162.05824 6568 1ca921809457c02bf5fd4d7384ef6475 "pdflatex"
+  "artigo_final.out" 1765807162.06024 5316 6c77e1d94148517db248f622586a1877 "pdflatex"
   "artigo_final.tex" 1765800473.62359 15889 a5dea4818d7f4e82c168c52d0d1ad338 ""
-  "artigo_final.toc" 1765804792.38678 2333 c2d2d98837172842990948b0115e879f "pdflatex"
+  "artigo_final.toc" 1765807162.06024 2333 c2d2d98837172842990948b0115e879f "pdflatex"
   "fig1_network.png" 0 -1 0 ""
   "fig2_clusters.png" 0 -1 0 ""
   "fig3_hubs.png" 0 -1 0 ""
