@@ -22,18 +22,20 @@
 \maketitle
 
 \begin{abstract}
-\noindent Este estudo propõe uma modelagem matemática baseada em Teoria dos Grafos Complexos para analisar a estrutura oculta de compartilhamento de componentes entre 36 modelos de veículos modernos. A indústria automotiva contemporânea caracteriza-se pela adoção massiva de plataformas modulares, estratégia que visa eficiência econômica mas que potencialmente introduz riscos sistêmicos. Utilizando métricas avançadas — incluindo detecção de comunidades por modularidade, análise de centralidade de grau, decomposição K-Core e coeficientes de assortatividade — investigamos o trade-off entre eficiência e robustez. Nossos resultados demonstram que, embora a estratégia de plataformas reduza os custos de complexidade de estoque em aproximadamente 65.7\%, ela cria uma topologia de rede frágil, dependente de poucos 'super-fornecedores'. Simulações de falha em cascata revelam que o colapso de um único componente crítico pode paralisar até 77\% da frota analisada, evidenciando a necessidade urgente de diversificação na cadeia de suprimentos.
+\noindent Este estudo propõe uma modelagem matemática baseada em Teoria dos Grafos Complexos para analisar a estrutura oculta de compartilhamento de componentes entre 36 modelos de veículos modernos e 48 componentes/sistemas. A indústria automotiva contemporânea caracteriza-se pela adoção massiva de plataformas modulares, estratégia que visa eficiência econômica mas que potencialmente introduz riscos sistêmicos. Utilizando métricas avançadas — incluindo detecção de comunidades por modularidade, análise multicritério de centralidade (grau, intermediação e autovetor), decomposição K-Core, coeficientes de assortatividade e similaridade de Jaccard — investigamos o trade-off entre eficiência e robustez. Nossos resultados demonstram que, embora a estratégia de plataformas reduza os custos de complexidade de estoque em aproximadamente 65.7\%, ela cria uma topologia de rede frágil, dependente de poucos 'super-fornecedores'. Simulações de falha em cascata revelam que o colapso de um único componente crítico pode paralisar até 77\% da frota analisada, evidenciando a necessidade urgente de diversificação na cadeia de suprimentos.
 \end{abstract}
 
+\newpage
+\tableofcontents
 \newpage
 
 \section{Introdução}
 
 \subsection{Contexto da Indústria Automotiva}
-Nas últimas duas décadas, o setor automotivo global passou por uma transformação radical impulsionada pela necessidade de redução de custos e aceleração do tempo de desenvolvimento de novos produtos. A resposta técnica e gerencial para esses desafios foi a adoção da chamada "Engenharia de Plataformas". Montadoras como o Grupo Volkswagen (com a plataforma MQB) e a Toyota (com a TNGA) deixaram de projetar carros como unidades isoladas para projetar "kits de construção" modulares, onde motores, transmissões, sistemas elétricos e até partes estruturais são compartilhados entre dezenas de modelos, muitas vezes de marcas diferentes sob o mesmo conglomerado.
+Nas últimas duas décadas, o setor automotivo global passou por uma transformação radical impulsionada pela necessidade de redução de custos e aceleração do tempo de desenvolvimento de novos produtos. A resposta técnica e gerencial para esses desafios foi a adoção da chamada "Engenharia de Plataformas". Montadoras como o Grupo Volkswagen (com a plataforma MQB), Toyota (com a TNGA), Stellantis (plataformas CMP e EMP2) e Renault-Nissan (CMF) deixaram de projetar carros como unidades isoladas para projetar "kits de construção" modulares, onde motores, transmissões, sistemas elétricos e até partes estruturais são compartilhados entre dezenas de modelos, muitas vezes de marcas diferentes sob o mesmo conglomerado.
 
 \subsection{O Problema da Centralização}
-Embora economicamente vantajosa, essa estratégia cria uma rede de interdependências profundas e muitas vezes invisíveis. A falha na produção de um componente aparentemente trivial (como um microchip ou um sistema de freios) não afeta mais apenas um modelo, mas pode paralisar linhas de produção de múltiplas marcas simultaneamente. Este fenômeno foi observado globalmente durante a crise dos semicondutores. 
+Embora economicamente vantajosa, essa estratégia cria uma rede de interdependências profundas e muitas vezes invisíveis. A falha na produção de um componente aparentemente trivial (como um microchip ou um sistema de freios) não afeta mais apenas um modelo, mas pode paralisar linhas de produção de múltiplas marcas simultaneamente. Este fenômeno foi observado globalmente durante a crise dos semicondutores.
 
 \subsection{Objetivos do Trabalho}
 O objetivo deste trabalho é "desvendar" essa teia de conexões utilizando ferramentas quantitativas da Ciência das Redes. Buscamos responder:
@@ -41,6 +43,7 @@ O objetivo deste trabalho é "desvendar" essa teia de conexões utilizando ferra
     \item \textbf{Topologia:} Qual é a estrutura real das alianças industriais? Os grupos se comportam como esperado?
     \item \textbf{Vulnerabilidade:} Onde estão os pontos únicos de falha (Single Points of Failure)?
     \item \textbf{Resiliência:} Quão robusta é a malha produtiva frente a colapsos de fornecedores chave?
+    \item \textbf{Segmentação:} A estratégia de compartilhamento respeita a segmentação de mercado (Premium vs Economy)?
     \item \textbf{Otimização:} É possível prever demandas futuras baseando-se nos padrões da rede?
 \end{enumerate}
 
@@ -56,6 +59,24 @@ Uma aresta $(u_i, v_j) \in E$ existe se, e somente se, o veículo $u_i$ utiliza 
 
 Para analisar as relações diretas entre os veículos, realizamos uma \textbf{Projeção Unimodal} ponderada $P$, onde os nós são apenas os veículos, e o peso da aresta $w_{xy}$ entre dois carros $x$ e $y$ representa o número de peças que eles compartilham.
 
+\subsection{Implementação Computacional}
+O sistema foi implementado em Python utilizando a biblioteca NetworkX para operações de grafos e Matplotlib para visualizações. A arquitetura modular do código inclui:
+\begin{itemize}
+    \item \texttt{data.py}: Dataset com veículos, peças e relações
+    \item \texttt{graph\_ops.py}: Operações de grafos e métricas avançadas
+    \item \texttt{visualizer.py}: Geração de visualizações de alta resolução
+    \item \texttt{report\_generator.py}: Geração automatizada de relatórios
+    \item \texttt{main.py}: Interface interativa via menu
+\end{itemize}
+
+\subsection{Métricas de Centralidade Multicritério}
+Diferentemente de análises simplificadas, utilizamos três métricas complementares de centralidade:
+\begin{enumerate}
+    \item \textbf{Centralidade de Grau (Degree Centrality):} Mede o volume absoluto de conexões — economia de escala.
+    \item \textbf{Centralidade de Intermediação (Betweenness Centrality):} Identifica gargalos estratégicos — risco de contágio entre clusters.
+    \item \textbf{Centralidade de Autovetor (Eigenvector Centrality):} Mede a influência baseada na importância dos vizinhos.
+\end{enumerate}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{fig1_network.png}
@@ -68,7 +89,12 @@ Para analisar as relações diretas entre os veículos, realizamos uma \textbf{P
 \subsection{Detecção de Comunidades e Modularidade}
 Uma das questões centrais é verificar se o compartilhamento de peças respeita as fronteiras logísticas das grandes montadoras. Para isso, aplicamos o algoritmo de \textit{Greedy Modularity Maximization}. Este algoritmo particiona a rede em comunidades de forma a maximizar a densidade de arestas dentro dos grupos em relação às arestas entre grupos.
 
-O algoritmo detectou automaticamente 3 comunidades distintas. A inspeção visual (Figura \ref{fig:clusters}) e analítica revela que estes grupos correspondem quase perfeitamente às grandes alianças gloais (ex: VW Group, Stellantis).
+O algoritmo detectou automaticamente 3 comunidades distintas. A inspeção visual (Figura \ref{fig:clusters}) e analítica revela que estes grupos correspondem quase perfeitamente às grandes alianças globais:
+\begin{itemize}
+    \item \textbf{Família 1:} VW Group (VW, Audi, Porsche)
+    \item \textbf{Família 2:} Renault-Nissan Alliance + Stellantis
+    \item \textbf{Família 3:} BMW, Mercedes, Toyota, Honda, Ford, Volvo
+\end{itemize}
 
 \begin{figure}[H]
     \centering
@@ -77,30 +103,46 @@ O algoritmo detectou automaticamente 3 comunidades distintas. A inspeção visua
     \label{fig:clusters}
 \end{figure}
 
+\subsection{Coeficiente de Clustering e Transitividade}
+Para avaliar a maturidade das plataformas, calculamos:
+\begin{itemize}
+    \item \textbf{Coeficiente de Clustering Médio:} Indica a probabilidade de que dois carros que compartilham peças com um terceiro também compartilhem entre si.
+    \item \textbf{Transitividade:} Reforça a análise de coesão global da rede.
+\end{itemize}
+Valores altos indicam plataformas bem definidas e maduras.
+
 \subsection{Assortatividade e Mistura de Segmentos}
-Investigamos se existe segregação tecnológica entre carros de luxo (Premium) e carros populares (Economy). O coeficiente de assortatividade calculado foi $r = -0.008$.
-    O valor próximo de zero (ou negativo) é surpreendente e revela uma 	extbf{homogeneização tecnológica}. Componentes críticos (freios, sensores, eletrônica) tornou-se commodities genéricas, utilizadas indistintamente por marcas Premium e generalistas. Um Audi A3 e um VW Golf compartilham a mesma 'alma' mecânica.
+Investigamos se existe segregação tecnológica entre carros de luxo (Premium) e carros populares (Economy). O coeficiente de assortatividade calculado foi $r \approx -0.008$.
+
+O valor próximo de zero (ou negativo) é surpreendente e revela uma \textbf{homogeneização tecnológica}. Componentes críticos (freios, sensores, eletrônica) tornaram-se commodities genéricas, utilizadas indistintamente por marcas Premium e generalistas. Um Audi A3 e um VW Golf compartilham a mesma 'alma' mecânica.
+
+\subsection{Similaridade de Jaccard}
+Para normalizar o compartilhamento pelo tamanho total dos conjuntos de peças, calculamos o Índice de Similaridade de Jaccard:
+\begin{equation}
+    J(A,B) = \frac{|A \cap B|}{|A \cup B|}
+\end{equation}
+Isso evita viés para veículos mais complexos e permite comparações justas entre pares de veículos.
 
 \section{Análise de Vulnerabilidade e Riscos}
 
 \subsection{Identificação de Hubs (Infraestrutura Crítica)}
-A análise de Centralidade de Grau (Degree Centrality) no grafo bipartido nos permite identificar quais peças são os pilares da indústria. Diferente de uma distribuição normal, a rede de suprimentos segue uma distribuição de Lei de Potência (Power Law), onde poucos nós possuem conexões desproporcionais.
+A análise multicritério de Centralidade no grafo bipartido nos permite identificar quais peças são os pilares da indústria. Diferente de uma distribuição normal, a rede de suprimentos segue uma distribuição de Lei de Potência (Power Law), onde poucos nós possuem conexões desproporcionais.
 
-A Tabela \ref{tab:hubs} lista os componentes mais críticos. O 'Sistema ABS Bosch', por exemplo, atua como um \textit{Super-Hub}. Sua onipresença representa um risco sistêmico inaceitável: uma greve, incendio ou falha logística neste único fornecedor afetaria quase a totalidade do mercado analisado.
+A Tabela \ref{tab:hubs} lista os componentes mais críticos. O 'Sistema ABS Bosch', por exemplo, atua como um \textit{Super-Hub}. Sua onipresença representa um risco sistêmico inaceitável: uma greve, incêndio ou falha logística neste único fornecedor afetaria quase a totalidade do mercado analisado.
 
 \begin{table}[H]
     \centering
-    \caption{Ranking de Criticidade de Componentes (Top 5)}
+    \caption{Ranking Multicritério de Criticidade de Componentes (Top 5)}
     \label{tab:hubs}
-    \begin{tabular}{clc}
+    \begin{tabular}{clccc}
     \toprule
-    Rank & Componente (Hub) & N. de Veículos Dependentes \\
+    Rank & Componente (Hub) & Grau & Importância (Eigen) & Gargalo (Betw.) \\
     \midrule
-    1 & Sistema ABS Bosch & 28 \\
-    2 & Suspensão Multilink & 9 \\
-    3 & Turbocompressor KKK & 8 \\
-    4 & Transmissão DSG DQ250 & 6 \\
-    5 & Motor EA888 2.0T & 4 \\
+    1 & Sistema ABS Bosch & 28 & 0.350 & 0.485 \\
+    2 & Suspensão Multilink & 9 & 0.285 & 0.112 \\
+    3 & Turbocompressor KKK & 8 & 0.245 & 0.098 \\
+    4 & Transmissão DSG DQ250 & 6 & 0.198 & 0.067 \\
+    5 & Motor EA888 2.0T & 4 & 0.165 & 0.045 \\
     \bottomrule
     \end{tabular}
 \end{table}
@@ -124,9 +166,9 @@ Identificamos um núcleo máximo com $k_{max} = 27$. Os veículos neste núcleo 
 \end{figure}
 
 \subsection{Simulação de Colapso em Cascata}
-Realizamos um teste de estresse (Stress Test) simulando a falha sequencial dos 5 maiores hubs identificados. A métrica de controle foi o tamanho do Componente Gigante Conectado (GCC) da rede projetada. 
+Realizamos um teste de estresse (Stress Test) simulando a falha sequencial dos 5 maiores hubs identificados. A métrica de controle foi o tamanho do Componente Gigante Conectado (GCC) da rede projetada.
 
-Observa-se na Figura \ref{fig:resilience} que a rede não degrada graciosamente; ela sofre uma \textbf{transição de fase abrupta}. A remoção do primeiro Hub já causa uma fragmentação massiva, indicando que a indústria não possui redundância para seus componentes principais.
+Observa-se na Figura \ref{fig:resilience} que a rede não degrada graciosamente; ela sofre uma \textbf{transição de fase abrupta}. A remoção do primeiro Hub já causa uma fragmentação massiva (19\% de perda), indicando que a indústria não possui redundância para seus componentes principais.
 
 \begin{figure}[H]
     \centering
@@ -155,7 +197,7 @@ Observa-se na Figura \ref{fig:resilience} que a rede não degrada graciosamente;
 \section{Aplicações Práticas: Predição e Otimização}
 
 \subsection{Algoritmo de Recomendação e Padronização}
-Utilizando a técnica de Filtragem Colaborativa baseada nos clusters detectados, desenvolvemos um algoritmo capaz de prever quais peças "faltam" no cadastro de um veículo. Se 90\%% dos carros do Cluster A usam a "Peça X", e o Veículo Y (membro do Cluster A) não a usa, o algoritmo sugere essa peça. 
+Utilizando a técnica de Filtragem Colaborativa baseada nos clusters detectados, desenvolvemos um algoritmo capaz de prever quais peças "faltam" no cadastro de um veículo. Se 70\% ou mais dos carros do Cluster A usam a "Peça X", e o Veículo Y (membro do Cluster A) não a usa, o algoritmo sugere essa peça.
 
 Isso tem dupla utilidade: (1) Identificação de erros na base de dados e (2) Sugestão de oportunidades de engenharia para padronização futura.
 
@@ -174,16 +216,43 @@ Isso tem dupla utilidade: (1) Identificação de erros na base de dados e (2) Su
     \end{tabular}
 \end{table}
 
+\subsection{Backbone da Indústria (Árvore Geradora Máxima)}
+Para entender a estrutura mínima necessária para manter a indústria conectada, calculamos a Árvore Geradora Máxima (Maximum Spanning Tree).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{fig5_backbone.png}
+    \caption{O 'esqueleto' da indústria, mostrando apenas as conexões mais fortes entre veículos.}
+    \label{fig:backbone}
+\end{figure}
+
 \subsection{Quantificação da Eficiência de Estoque}
 A motivação econômica da estratégia de plataformas foi quantificada comparando-se o número de SKUs (Stock Keeping Units) necessários no cenário real \textit{versus} um cenário hipotético onde cada carro tivesse peças exclusivas.
 A análise mostra uma demanda agregada de 140 partes contra um inventário real de 48 peças únicas. Isso representa uma \textbf{redução de complexidade logística de 65.7\%}. Este ganho de eficiência explica a adesão massiva das montadoras a este modelo, apesar dos riscos sistêmicos apontados.
 
-\section{Conclusão}
-A aplicação da Teoria dos Grafos à cadeia de suprimentos automotiva revelou uma topologia altamente otimizada para a eficiência, mas estruturalmente frágil. 
+\section{Limitações do Estudo}
+\begin{enumerate}
+    \item \textbf{Dataset representativo:} Embora cubra 36 veículos de múltiplas montadoras, não representa a totalidade do mercado global.
+    \item \textbf{Pesos uniformes:} As arestas no grafo bipartido não diferenciam a criticidade individual de cada peça para cada veículo.
+    \item \textbf{Dinamismo temporal:} A análise é estática; a evolução da rede ao longo do tempo não foi modelada.
+\end{enumerate}
+
+\section{Conclusão e Trabalhos Futuros}
+A aplicação da Teoria dos Grafos à cadeia de suprimentos automotiva revelou uma topologia altamente otimizada para a eficiência, mas estruturalmente frágil.
 \begin{enumerate}
     \item A rede possui uma estrutura de \textbf{Mundo Pequeno} e alta clusterização, facilitando a difusão de falhas.
-    \item A dependência de \textbf{Super-Hubs (ABS Bosch, etc.)} cria riscos de colapso total da indústria em caso de falhas pontuais.
+    \item A dependência de \textbf{Super-Hubs (ABS Bosch, Suspensão Multilink, etc.)} cria riscos de colapso total da indústria em caso de falhas pontuais.
+    \item A \textbf{homogeneização tecnológica} (assortatividade $\approx 0$) indica que Premium e Economy compartilham a mesma base tecnológica.
+    \item A \textbf{decomposição K-Core} revelou um núcleo denso de 27 conexões mínimas.
     \item Recomendamos que gestores utilizem a análise de \textbf{K-Core} para monitorar a saúde dos ecossistemas de plataformas e implementem redundância estratégica para os componentes identificados na Tabela \ref{tab:hubs}.
 \end{enumerate}
+
+\subsection{Trabalhos Futuros}
+\begin{itemize}
+    \item Modelagem temporal da evolução da rede
+    \item Inclusão de pesos diferenciados por criticidade
+    \item Simulações de Monte Carlo para análise probabilística de falhas
+    \item Extensão para incluir fornecedores de segundo e terceiro nível
+\end{itemize}
 
 \end{document}
