@@ -62,8 +62,8 @@ Diferentemente de análises simplificadas, utilizamos três métricas complement
 2. **Centralidade de Intermediação (Betweenness Centrality):** Identifica gargalos estratégicos — risco de contágio.
 3. **Centralidade de Autovetor (Eigenvector Centrality):** Mede a influência baseada na importância dos vizinhos.
 
-![Rede Complexa Bipartida](fig1_network.png)
-*Figura 1: Representação visual da rede bipartida Veículo-Peça. Note a alta densidade de conexões convergindo para nós centrais (hubs).*
+![Rede Complexa Bipartida](../assets/fig1_network.png)
+*Figura 1: Representação visual da rede bipartida Veículo-Peça. Nós azuis representam veículos; nós laranja representam peças. A alta densidade de conexões convergindo para nós centrais evidencia a presença de hubs.*
 
 ---
 
@@ -73,29 +73,30 @@ Diferentemente de análises simplificadas, utilizamos três métricas complement
 
 Uma das questões centrais é verificar se o compartilhamento de peças respeita as fronteiras logísticas das grandes montadoras. Para isso, aplicamos o algoritmo de *Greedy Modularity Maximization*. Este algoritmo particiona a rede em comunidades de forma a maximizar a densidade de arestas dentro dos grupos em relação às arestas entre grupos.
 
-O algoritmo detectou automaticamente **3 comunidades distintas**. A inspeção visual e analítica revela que estes grupos correspondem quase perfeitamente às grandes alianças globais:
+O algoritmo detectou automaticamente **3 comunidades distintas**. A inspeção visual (Figura 2) e analítica revela que estes grupos correspondem quase perfeitamente às grandes alianças globais:
 
 - **Família 1:** VW Group (VW, Audi, Porsche)
 - **Família 2:** Renault-Nissan Alliance + Stellantis
 - **Família 3:** BMW, Mercedes, Toyota, Honda, Ford, Volvo
 
-![Clusters de Veículos](fig2_clusters.png)
-*Figura 2: Grafo projetado onde as cores indicam os clusters detectados. A forte clusterização confirma que a engenharia de plataformas cria silos de integração.*
+![Clusters de Veículos](../assets/fig2_clusters.png)
+*Figura 2: Grafo projetado (veículo-veículo) onde as cores indicam os clusters detectados automaticamente. A espessura das arestas representa o número de peças compartilhadas. A forte clusterização confirma que a engenharia de plataformas cria silos de integração.*
 
 ### 3.2 Coeficiente de Clustering e Transitividade
 
-Para avaliar a maturidade das plataformas, calculamos:
+Para avaliar a maturidade das plataformas, calculamos o coeficiente de clustering local para cada veículo (Figura 3). Valores altos indicam que os vizinhos de um nó também são conectados entre si, característica de plataformas bem definidas.
 
-- **Coeficiente de Clustering Médio:** Indica a probabilidade de que dois carros que compartilham peças com um terceiro também compartilhem entre si.
-- **Transitividade:** Reforça a análise de coesão global da rede.
-
-Valores altos indicam plataformas bem definidas e maduras.
+![Local Clustering](../assets/fig10_local_clustering.png)
+*Figura 3: Coeficiente de clustering local por veículo. Veículos com alto clustering pertencem a plataformas maduras com forte integração interna.*
 
 ### 3.3 Assortatividade e Mistura de Segmentos
 
 Investigamos se existe segregação tecnológica entre carros de luxo (Premium) e carros populares (Economy). O coeficiente de assortatividade calculado foi $r \approx -0.008$.
 
-O valor próximo de zero revela uma **homogeneização tecnológica**. Componentes críticos (freios, sensores, eletrônica) tornaram-se commodities genéricas, utilizadas indistintamente por marcas Premium e generalistas. Um Audi A3 e um VW Golf compartilham a mesma "alma" mecânica.
+A Figura 4 apresenta a matriz de mistura, que mostra a proporção de conexões entre segmentos. O valor próximo de zero revela uma **homogeneização tecnológica**: componentes críticos tornaram-se commodities genéricas, utilizadas indistintamente por marcas Premium e generalistas.
+
+![Mixing Matrix](../assets/fig9_mixing_matrix.png)
+*Figura 4: Matriz de mistura por segmento de mercado. A distribuição equilibrada indica que veículos Premium e Economy compartilham componentes de forma cruzada, sem segregação significativa.*
 
 ### 3.4 Similaridade de Jaccard
 
@@ -103,7 +104,10 @@ Para normalizar o compartilhamento pelo tamanho total dos conjuntos de peças, c
 
 $$J(A,B) = \frac{|A \cap B|}{|A \cup B|}$$
 
-Isso evita viés para veículos mais complexos e permite comparações justas entre pares.
+O heatmap (Figura 5) revela os pares de veículos com maior similaridade, permitindo identificar "gêmeos de plataforma" que compartilham praticamente a mesma base tecnológica.
+
+![Jaccard Heatmap](../assets/fig7_jaccard_heatmap.png)
+*Figura 5: Heatmap de similaridade de Jaccard entre todos os pares de veículos. Células mais escuras indicam maior sobreposição de componentes. Blocos diagonais confirmam os clusters identificados.*
 
 ---
 
@@ -111,7 +115,10 @@ Isso evita viés para veículos mais complexos e permite comparações justas en
 
 ### 4.1 Identificação de Hubs (Infraestrutura Crítica)
 
-A análise multicritério de centralidade no grafo bipartido permite identificar quais peças são os pilares da indústria. Diferente de uma distribuição normal, a rede de suprimentos segue uma **distribuição de Lei de Potência (Power Law)**, onde poucos nós possuem conexões desproporcionais.
+A análise multicritério de centralidade no grafo bipartido permite identificar quais peças são os pilares da indústria. A Figura 6 mostra a distribuição de graus da rede projetada, revelando uma **distribuição de Lei de Potência (Power Law)** onde poucos nós possuem conexões desproporcionais.
+
+![Degree Distribution](../assets/fig8_degree_distribution.png)
+*Figura 6: Distribuição de graus em escala linear (esquerda) e log-log (direita). A linearidade aproximada no gráfico log-log confirma o comportamento scale-free da rede, típico de sistemas com hubs dominantes.*
 
 ### Tabela 1: Ranking Multicritério de Criticidade (Top 5)
 
@@ -123,40 +130,43 @@ A análise multicritério de centralidade no grafo bipartido permite identificar
 | 4 | Transmissão DSG DQ250 | 6 | 0.198 | 0.067 |
 | 5 | Motor EA888 2.0T | 4 | 0.165 | 0.045 |
 
-O **Sistema ABS Bosch** atua como um *Super-Hub* — sua onipresença representa um risco sistêmico: uma greve, incêndio ou falha logística neste único fornecedor afetaria quase a totalidade do mercado analisado.
+O **Sistema ABS Bosch** atua como um *Super-Hub* — sua onipresença representa um risco sistêmico. A Figura 7 compara as três métricas de centralidade, permitindo identificar componentes que são simultaneamente volumosos (alto grau), influentes (alto autovetor) e gargalos (alta intermediação).
 
-![Top Parts](fig3_hubs.png)
-*Figura 3: As 15 peças mais conectadas da indústria — visualização da disparidade de conectividade.*
+![Centrality Comparison](../assets/fig12_centrality_comparison.png)
+*Figura 7: Comparação multicritério de centralidades. Esquerda: Grau vs Intermediação. Direita: Grau vs Autovetor. O tamanho dos pontos representa o grau; a cor representa a terceira métrica. O Sistema ABS Bosch destaca-se em todas as dimensões.*
+
+![Top Parts](../assets/fig3_hubs.png)
+*Figura 8: As 15 peças mais conectadas da indústria — ranking por número de veículos dependentes.*
 
 ### 4.2 Decomposição K-Core: O Núcleo Estável
 
-Para entender a profundidade da interconexão, realizamos a **decomposição K-Core**. O processo revela a estrutura em camadas da indústria:
+Para entender a profundidade da interconexão, realizamos a **decomposição K-Core** (Figura 9). O processo revela a estrutura em camadas da indústria:
 
 - **Núcleo máximo** ($k_{max} = 27$): Veículos que compartilham peças com pelo menos outros 27 modelos
 - **Periferia** (cascas externas): Modelos de nicho ou com tecnologias proprietárias
 
-![K-Core Decomposition](fig6_kcore.png)
-*Figura 4: Decomposição K-Core. Nós mais escuros pertencem às camadas mais profundas e interconectadas.*
+![K-Core Decomposition](../assets/fig6_kcore.png)
+*Figura 9: Decomposição K-Core do grafo projetado. Nós mais escuros (pretos) pertencem ao núcleo mais profundo e interconectado; nós mais claros (amarelos) estão na periferia.*
 
 ### 4.3 Simulação de Colapso em Cascata
 
-Realizamos um **Stress Test** simulando a falha sequencial dos 5 maiores hubs. A métrica de controle foi o tamanho do Componente Gigante Conectado (GCC).
+Realizamos um **Stress Test** simulando a falha sequencial dos 5 maiores hubs. A métrica de controle foi o tamanho do Componente Gigante Conectado (GCC). A Figura 10 mostra a curva de degradação.
 
-![Curva de Resiliência](fig4_resilience.png)
-*Figura 5: Curva de degradação da rede. A queda acentuada inicial é característica de redes Scale-Free sob ataque direcionado.*
+![Curva de Resiliência](../assets/fig4_resilience.png)
+*Figura 10: Curva de resiliência da rede. A queda acentuada após a remoção do primeiro hub é característica de redes Scale-Free sob ataque direcionado. A rede perde 19% de conectividade com a falha de um único componente.*
 
 ### Tabela 2: Impacto da Falha Sequencial de Fornecedores
 
-| Fornecedores Removidos | Veículos Conectados |
-|------------------------|---------------------|
-| 0 | 36 |
-| 1 | 29 |
-| 2 | 27 |
-| 3 | 22 |
-| 4 | 22 |
-| 5 | 22 |
+| Fornecedores Removidos | Veículos Conectados | Perda Acumulada |
+|------------------------|---------------------|-----------------|
+| 0 | 36 | 0% |
+| 1 | 29 | 19% |
+| 2 | 27 | 25% |
+| 3 | 22 | 39% |
+| 4 | 22 | 39% |
+| 5 | 22 | 39% |
 
-A rede não degrada graciosamente — ela sofre uma **transição de fase abrupta**. A remoção do primeiro Hub já causa fragmentação massiva (19% de perda), indicando ausência de redundância.
+A rede não degrada graciosamente — ela sofre uma **transição de fase abrupta**. A remoção do primeiro Hub já causa fragmentação massiva, indicando ausência de redundância.
 
 ---
 
@@ -184,10 +194,10 @@ Utilizando a técnica de **Filtragem Colaborativa** baseada nos clusters detecta
 
 ### 5.2 Backbone da Indústria (Árvore Geradora Máxima)
 
-Para entender a estrutura mínima necessária para manter a indústria conectada, calculamos a **Árvore Geradora Máxima (Maximum Spanning Tree)**.
+Para entender a estrutura mínima necessária para manter a indústria conectada, calculamos a **Árvore Geradora Máxima (Maximum Spanning Tree)**. A Figura 11 mostra o "esqueleto" da indústria.
 
-![Backbone](fig5_backbone.png)
-*Figura 6: O 'esqueleto' da indústria, mostrando apenas as conexões mais fortes entre veículos.*
+![Backbone](../assets/fig5_backbone.png)
+*Figura 11: Árvore Geradora Máxima (backbone) da rede projetada. Cada aresta representa a conexão mais forte entre veículos, revelando a estrutura mínima de integração industrial.*
 
 ### 5.3 Quantificação da Eficiência de Estoque
 
@@ -213,10 +223,11 @@ Este ganho de eficiência explica a adesão massiva das montadoras a este modelo
 
 A aplicação da Teoria dos Grafos à cadeia de suprimentos automotiva revelou uma topologia altamente otimizada para a eficiência, mas estruturalmente frágil:
 
-1. A rede possui uma estrutura de **Mundo Pequeno** e alta clusterização, facilitando a difusão de falhas.
-2. A dependência de **Super-Hubs** (ABS Bosch, Suspensão Multilink) cria riscos de colapso total em caso de falhas pontuais.
-3. A **homogeneização tecnológica** (assortatividade ≈ 0) indica que Premium e Economy compartilham a mesma base tecnológica.
-4. A **decomposição K-Core** revelou um núcleo denso de 27 conexões mínimas.
+1. A rede possui uma estrutura de **Mundo Pequeno** e alta clusterização (Figura 3), facilitando a difusão de falhas.
+2. A dependência de **Super-Hubs** (Figuras 7-8) cria riscos de colapso total em caso de falhas pontuais.
+3. A **homogeneização tecnológica** (Figura 4, assortatividade ≈ 0) indica que Premium e Economy compartilham a mesma base tecnológica.
+4. A **decomposição K-Core** (Figura 9) revelou um núcleo denso de 27 conexões mínimas.
+5. A rede exibe comportamento **Scale-Free** (Figura 6), vulnerável a ataques direcionados.
 
 ### Recomendações
 
@@ -230,3 +241,14 @@ A aplicação da Teoria dos Grafos à cadeia de suprimentos automotiva revelou u
 - Inclusão de pesos diferenciados por criticidade
 - Simulações de Monte Carlo para análise probabilística de falhas
 - Extensão para incluir fornecedores de segundo e terceiro nível
+
+---
+
+## Apêndice: Material Suplementar
+
+As seguintes visualizações adicionais estão disponíveis no repositório do projeto:
+
+- **fig11_bridges_cuts.png**: Pontes e pontos de articulação (elementos críticos para conectividade)
+
+![Bridges and Cuts](../assets/fig11_bridges_cuts.png)
+*Figura A1 (Suplementar): Identificação de pontes (arestas críticas em vermelho) e pontos de articulação (nós críticos em vermelho). Estes elementos, se removidos, fragmentariam a rede.*

@@ -1,0 +1,25 @@
+\babel@toc {portuguese}{}\relax 
+\contentsline {section}{\numberline {1}Introdução}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Contexto da Indústria Automotiva}{3}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}O Problema da Centralização}{3}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Objetivos do Trabalho}{3}{subsection.1.3}%
+\contentsline {section}{\numberline {2}Metodologia}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Modelagem Matemática}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Implementação Computacional}{4}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Métricas de Centralidade Multicritério}{4}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Análise da Topologia da Rede}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Detecção de Comunidades e Modularidade}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Coeficiente de Clustering e Transitividade}{6}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Assortatividade e Mistura de Segmentos}{7}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Similaridade de Jaccard}{7}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Análise de Vulnerabilidade e Riscos}{7}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Identificação de Hubs (Infraestrutura Crítica)}{7}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Decomposição K-Core: O Núcleo Estável}{8}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Simulação de Colapso em Cascata}{9}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Aplicações Práticas: Predição e Otimização}{11}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Algoritmo de Recomendação e Padronização}{11}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Backbone da Indústria (Árvore Geradora Máxima)}{11}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Quantificação da Eficiência de Estoque}{12}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Limitações do Estudo}{13}{section.6}%
+\contentsline {section}{\numberline {7}Conclusão e Trabalhos Futuros}{13}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Trabalhos Futuros}{13}{subsection.7.1}%

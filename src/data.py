@@ -2,7 +2,7 @@
 Dataset for Vehicle Parts Analysis.
 """
 
-# 24 Veículos
+# 36 Veículos
 V_CARROS = [
     "VW Golf Mk6", "Audi A3 8P", "Porsche Cayenne", "Renault Clio IV",
     "Nissan Micra K13", "VW Polo Mk5", "Audi TT Mk2", "Jeep Compass",
@@ -15,7 +15,7 @@ V_CARROS = [
     "Ford Focus", "Ford Kuga", "Volvo XC40", "Volvo XC60"
 ]
 
-# 22 Peças
+# 48 Peças
 V_PECAS = [
     "Motor EA111 1.6", "Motor EA888 2.0T", "Transmissão DSG DQ250", "Plataforma PQ35",
     "Plataforma MQB", "Plataforma CMF-B", "Suspensão Multilink", "Motor Tigershark 2.4",
